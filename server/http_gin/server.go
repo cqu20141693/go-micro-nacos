@@ -27,6 +27,10 @@ func configRouter(server server.Server) {
 
 	service := handler.NewSipService(client.NewSipClient())
 	service.InitRouteMapper(router)
+	cameraService := handler.CameraService{}
+	cameraService.InitRouteMapper(router)
+	//
+
 	hd := server.NewHandler(router)
 	if err := server.Handle(hd); err != nil {
 		logger.Fatal(err)

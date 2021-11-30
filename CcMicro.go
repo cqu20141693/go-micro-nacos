@@ -3,7 +3,9 @@ package ccMicro
 import (
 	"context"
 	"github.com/cqu20141693/sip-server/plugins/registry/nacos"
+	"github.com/go-playground/validator/v10"
 	"go-micro.dev/v4/client"
+	"go-micro.dev/v4/logger"
 	"go-micro.dev/v4/selector"
 
 	httpClient "github.com/asim/go-micro/plugins/client/http/v4"
@@ -23,6 +25,14 @@ type CcAPI interface {
 
 type NacosNamespaceContextKey struct {
 }
+
+var PanicFunc = func() {
+	if err := recover(); err != nil {
+		logger.Info(err)
+		logger.Info("occur panic")
+	}
+}
+var Validate = validator.New()
 
 func CreateRegister() registry.Registry {
 	return nacos.NewRegistry(func(options *registry.Options) {
