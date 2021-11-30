@@ -9,6 +9,9 @@ require (
 	github.com/nacos-group/nacos-sdk-go v1.0.9
 	github.com/spf13/viper v1.9.0
 	go-micro.dev/v4 v4.4.0
+	gorm.io/driver/mysql v1.2.1
+    gorm.io/gorm v1.22.4
+    gorm.io/plugin/dbresolver v1.1.0
 )
 
 require (
