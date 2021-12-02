@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	ccMicro "github.com/cqu20141693/sip-server/event"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/clients/config_client"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -47,7 +48,6 @@ func newDefaultConfig() config {
 var LocalNacosConfig = newDefaultConfig()
 
 func NacosInit() {
-	ReadLocalConfig()
 
 	nacosConfig := viper.GetStringMap("cc.cloud.nacos.config")
 	marshal, _ := json.Marshal(nacosConfig)
@@ -80,6 +80,7 @@ func NacosInit() {
 		panic(Err)
 	}
 	ReadNacosConfig()
+	ccMicro.TriggerEvent(ccMicro.ConfigComplete)
 }
 
 func ReadNacosConfig() {

@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	ccMicro "github.com/cqu20141693/sip-server/event"
 	"github.com/spf13/viper"
 	"go-micro.dev/v4/logger"
 	"log"
@@ -11,7 +12,6 @@ func init() {
 	ReadLocalConfig()
 	NacosInit()
 }
-
 func ReadLocalConfig() {
 	// 读取本地配置
 	viper.SetConfigName("bootstrap.yml")
@@ -27,6 +27,7 @@ func ReadLocalConfig() {
 		}
 		log.Fatal(err)
 	}
+	ccMicro.TriggerEvent(ccMicro.LocalConfigComplete)
 }
 
 func GetAppConfigName(name, active string) (string, error) {

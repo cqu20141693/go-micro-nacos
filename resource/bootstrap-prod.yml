@@ -1,0 +1,24 @@
+server:
+  port: 15093
+cc:
+  cloud:
+    nacos:
+      config:
+        server-addr: 172.21.88.241:8848
+        file-extension: yml
+        namespace: 7b377435-8298-41ba-bf94-d02780873289
+        register-enabled: false
+  datasource:
+    pool:
+      maxIdleConn: 2
+      maxOpenConn: 20
+      connMaxIdleTime: 300
+      connMaxLifetime: 3600
+    master:
+      username: admin
+      password: cc!@#20210601
+      url: tcp(172.20.245.149:3306)/link?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true
+    slave:
+      username: admin
+      password: cc!@#20210601
+      url: tcp(172.21.88.237:3306)/link?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true

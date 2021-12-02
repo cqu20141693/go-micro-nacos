@@ -6,3 +6,13 @@ cc:
         file-extension: yml
         namespace: ca1d1ded-cb0b-460c-8efa-7e665c7a34e0
         register-enabled: false
+  datasource:
+    pool:
+      maxIdleConn: 2
+      maxOpenConn: 20
+      connMaxIdleTime: 300
+      connMaxLifetime: 3600
+    master:
+      username: admin
+      password: chongC@123
+      url: tcp(172.19.214.113:3306)/link?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true&multiStatements=true

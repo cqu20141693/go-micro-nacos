@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"fmt"
 	ccMicro "github.com/cqu20141693/sip-server"
 	"github.com/cqu20141693/sip-server/common"
@@ -8,6 +9,7 @@ import (
 	"github.com/cqu20141693/sip-server/domain"
 	"github.com/gin-gonic/gin"
 	"go-micro.dev/v4/logger"
+	"gorm.io/gorm"
 	"net/http"
 	"strconv"
 )
@@ -68,7 +70,7 @@ func (c2 *CameraService) GetByCameraId(c *gin.Context) {
 	var cameraDo domain.CameraDO
 	if results := db.MysqlDB.Where("camera_id=?", cameraId).First(&cameraDo); results.Error != nil {
 		logger.Info("select failed")
-		if results.Error.Error() == "record not found" {
+		if errors.Is(results.Error, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusOK, common.ResultUtils.Success(nil))
 		} else {
 			c.JSON(http.StatusOK, common.ResultUtils.Fail("0000", results.Error.Error()))
@@ -128,7 +130,7 @@ func (c2 *CameraService) GetByGKSN(c *gin.Context) {
 	var cameraDo domain.CameraDO
 	if results := db.MysqlDB.Where("group_key=? and sn=?", groupKey, sn).First(&cameraDo); results.Error != nil {
 		logger.Info("select failed")
-		if results.Error.Error() == "record not found" {
+		if errors.Is(results.Error, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusOK, common.ResultUtils.Success(nil))
 		} else {
 			c.JSON(http.StatusOK, common.ResultUtils.Fail("0000", results.Error.Error()))
