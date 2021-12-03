@@ -29,7 +29,7 @@ func (c2 *CameraService) InitRouteMapper(router *gin.Engine) {
 	router.POST("api/camera/insert", c2.Insert)
 	router.POST("api/camera/getByCameraId", c2.GetByCameraId)
 	router.POST("api/camera/getByGKSN", c2.GetByGKSN)
-	router.POST("api/camera/updateByCameraId", c2.UpdateByCameraId)
+	router.POST("api/camera/update/:cameraId", c2.UpdateByCameraId)
 	router.POST("api/camera/updateByGKSN", c2.UpdateByGKSN)
 	router.POST("api/camera/deleteById", c2.DeleteById)
 	router.POST("api/camera/deleteByGKSN", c2.DeleteByGKSN)
@@ -37,6 +37,7 @@ func (c2 *CameraService) InitRouteMapper(router *gin.Engine) {
 }
 
 type CameraService struct {
+	common.BaseRestController
 }
 
 func (c2 *CameraService) Insert(c *gin.Context) {
@@ -51,6 +52,7 @@ func (c2 *CameraService) Insert(c *gin.Context) {
 		GroupKey: cameraVo.GroupKey,
 		Sn:       cameraVo.Sn,
 		CameraId: cameraVo.CameraId,
+		Token:    cameraVo.Token,
 	}
 	results := db.MysqlDB.Create(&do)
 	if results.Error != nil {
@@ -143,15 +145,23 @@ func (c2 *CameraService) GetByGKSN(c *gin.Context) {
 }
 
 func (c2 *CameraService) UpdateByCameraId(c *gin.Context) {
-	var req domain.UpdateReq
-	err := c.ShouldBindJSON(&req)
-	if err != nil {
-		logger.Info("binding failed")
-		c.JSON(http.StatusOK, common.ResultUtils.Fail("0000", err.Error()))
+
+	cameraId := c.Param("cameraId")
+	if cameraId == "" {
+		c2.ResponseFailureForParameter(c, "cameraId not exist")
 		return
 	}
-	do := domain.ConvertCameraDO(&req)
-	results := db.MysqlDB.Model(&domain.CameraDO{}).Where("camera_id=?", req.CameraId).Updates(do)
+	if len(cameraId) > 64 {
+		c2.ResponseFailureForParameter(c, "cameraId length error")
+		return
+	}
+	token := c.Query("token")
+	if token == "" {
+		c2.ResponseFailureForParameter(c, "token not exist")
+		return
+	}
+
+	results := db.MysqlDB.Model(&domain.CameraDO{}).Where("camera_id=?", cameraId).Update("token", token)
 	if results.Error != nil {
 		logger.Info("update failed")
 		c.JSON(http.StatusOK, common.ResultUtils.Fail("0000", results.Error.Error()))

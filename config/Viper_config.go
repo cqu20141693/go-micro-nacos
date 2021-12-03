@@ -10,7 +10,10 @@ import (
 
 func init() {
 	ReadLocalConfig()
-	NacosInit()
+	if viper.GetStringMap("cc.cloud.nacos.config") != nil {
+		NacosInit()
+	}
+	ccMicro.TriggerEvent(ccMicro.ConfigComplete)
 }
 func ReadLocalConfig() {
 	// 读取本地配置

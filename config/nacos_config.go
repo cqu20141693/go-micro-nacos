@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	ccMicro "github.com/cqu20141693/sip-server/event"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/clients/config_client"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -80,7 +79,6 @@ func NacosInit() {
 		panic(Err)
 	}
 	ReadNacosConfig()
-	ccMicro.TriggerEvent(ccMicro.ConfigComplete)
 }
 
 func ReadNacosConfig() {
